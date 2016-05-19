@@ -10,22 +10,33 @@ public class Action {
     public double thrust;
     public double turn;
     public boolean shoot;
+    public boolean mine;
 
-    public Action() {}
+    public Action() {
+    }
 
     /**
      * Create a new action to be executed by the controller
      *
      * @param thrust 1 is full thrust, 0 is nothing
-     * @param turn 1 is clockwise, -1 is anticlockwise, 0 is don't turn
-     * @param shoot true is fire, false is don't fire
+     * @param turn   1 is clockwise, -1 is anticlockwise, 0 is don't turn
+     * @param shoot  true is fire, false is don't fire
      */
-    public Action(double thrust, double turn, boolean shoot) {
+    public Action(double thrust, double turn, boolean shoot, boolean mine) {
         this.thrust = thrust;
         this.turn = turn;
         this.shoot = shoot;
+        this.mine = mine;
+
     }
 
+    public Action(double thrust, double turn, boolean shoot){
+
+    this.thrust=thrust;
+    this.turn=turn;
+    this.shoot=shoot;
+    this.mine=false;
+}
     /**
      * Create an action which is a copy of an existing action
      *
@@ -35,9 +46,10 @@ public class Action {
         thrust = a.thrust;
         turn = a.turn;
         shoot = a.shoot;
+        mine = a.mine;
     }
 
     public String toString() {
-        return thrust + " : " + turn + " : " + shoot;
+        return thrust + " : " + turn + " : " + shoot + ":" + mine;
     }
 }
