@@ -261,9 +261,12 @@ public class SimpleBattle {
         //System.out.println("Player 1 at time " + currentTick + " life="+this.stats.get(1).life+ " cooldown=" +this.stats.get(1).cooldown+" missiles="+this.stats.get(1).nMissiles);
         advance(a1, a2);
         // update missiles
-        for (GameObject ob : objects)
-            if(ob instanceof BattleMissile)
+        for (GameObject ob : objects) {
+            if (ob instanceof BattleMissile)
                 ob.update();
+            if (ob instanceof Shockwave)
+                ob.update();
+        }
 
         checkCollision(s1);
         checkCollision(s2);
@@ -455,7 +458,7 @@ public class SimpleBattle {
         // e.g. asteroids do not collide with themselves
         if (!actor.dead() &&
                 (actor instanceof BattleMissile
-                        || actor instanceof NeuroShip)) {
+                        || actor instanceof NeuroShip || actor instanceof Shockwave)) {
             if (actor instanceof BattleMissile) {
                 System.out.println("Missile: " + actor);
             }
@@ -475,12 +478,28 @@ public class SimpleBattle {
             // the actor is a ship
             int playerId = (actor == s1 ? 0 : 1);
             for (GameObject ob : objects) {
+                if (ob instanceof Shockwave) {
+                    System.out.println("shockwave collision");
+                    if (overlap(actor, ob)) {
+                        System.out.println("shockwave overlap");
+                        Vector2d dir = new Vector2d(actor.s,true);
+                        dir.subtract(ob.s);
+                        dir.normalise();
+                        if(playerId==1) {
+                            s2.addForceRotate(NeuroShip.MIN_FORCE, NeuroShip.MAX_FORCE, dir);
+                            //    this.stats.get(0).nPoints += 10;
+                        } else {
+                            s1.addForceRotate(NeuroShip.MIN_FORCE, NeuroShip.MAX_FORCE, dir);
+                            //   this.stats.get(1).nPoints += 10;
+                        }
+                    }
+                }
                 if(ob.getId() != playerId) {
                     if(ob instanceof NeuroShip) {
                         //System.out.println("ship " + ob.getId() + " playerId " + playerId);
                         if (overlap(actor, ob)) {
-                            this.stats.get(playerId).life=0;
-                            this.stats.get(1-playerId).life=0;
+                            this.stats.get(playerId).life = 0;
+                            this.stats.get(1 - playerId).life = 0;
                             //System.out.println(this.stats.get(1-playerId).life);
                             return;
                         }
@@ -516,6 +535,8 @@ public class SimpleBattle {
                     if(overlap(ob1,ob2)) {
                         ob1.hit();
                         ob2.hit();
+                        Shockwave shock = new Shockwave(ob1.s, new Vector2d(0,0, true));
+                        objects.add(shock);
                     }
                 }
             }
