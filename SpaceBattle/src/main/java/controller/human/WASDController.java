@@ -15,13 +15,14 @@ import java.awt.event.KeyListener;
 public class WASDController implements BattleController, KeyListener {
 
     public static Action[] ActionMap = new Action[]{
-            new Action(0.0,0.0,false),
-            new Action(0.0,-1.0,false),
-            new Action(0.0,1.0,false),
-            new Action(1.0,0.0,false),
-            new Action(1.0,-1.0,false),
-            new Action(1.0,1.0,false),
-            new Action(0.0,0.0,true)
+            new Action(0.0,0.0,false, false),
+            new Action(0.0,-1.0,false, false),
+            new Action(0.0,1.0,false, false),
+            new Action(1.0,0.0,false, false),
+            new Action(1.0,-1.0,false, false),
+            new Action(1.0,1.0,false, false),
+            new Action(0.0,0.0,true, false),
+            new Action (0.0, 0.0, false, true)
 
     };
 

@@ -18,7 +18,7 @@ public interface Constants {
     Color bg = Color.black;
     Font font = new Font("Courier", Font.PLAIN, 20);
 
-    Color[] pColors = {Color.green, Color.blue};
+    Color[] pColors = {Color.green, Color.blue, Color.yellow};
 
     int delay = 20;
     double ac = 0.01;
@@ -35,6 +35,9 @@ public interface Constants {
     double missileMinVelocity = 2;
     int missileRadius = 2;
     int missileTTL = 100;
+    int mineRadius = 5;
+    int mineTTL = 10;
+    
 
     // how many smaller asteroids an asteroid splits into
     int nSplits = 3;

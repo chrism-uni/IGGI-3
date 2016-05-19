@@ -37,14 +37,17 @@ public class SimpleBattle {
 
     public static int nbObstacles = 5;
     public static int MISSILE_BUDGET = 10000;
+    public static int MINE_BUDGET = 30;
     public static int MISSILE_SPEED = 4;
+    public static int MINE_SPEED = 0;
+    public static int MINECOOLDOWN_TIME = 4;
     public static int COOLDOWN_TIME = 4;
     public static int LIFE = 3;
     public static double MIN_SHOOT_RANGE = 60;
     public static double maxShootRange = 10000;
 
     public static int MISSILE_COST = 1;
-
+    public static int MINE_COST = 1;
     public static int fitFunc = 1;
 
     private static final double MAX_SCORE = 1000000;
@@ -212,8 +215,8 @@ public class SimpleBattle {
         this.currentTick = 0;
         this.winner = -1;
 
-        stats.add(new PlayerStats(MISSILE_BUDGET, 0, LIFE, 0, MISSILE_BUDGET));
-        stats.add(new PlayerStats(MISSILE_BUDGET, 0, LIFE, 0, MISSILE_BUDGET));
+        stats.add(new PlayerStats(MISSILE_BUDGET, 0, LIFE, 0, MISSILE_BUDGET, MINE_BUDGET, MINE_BUDGET));
+        stats.add(new PlayerStats(MISSILE_BUDGET, 0, LIFE, 0, MISSILE_BUDGET, MINE_BUDGET, MINE_BUDGET));
         objects.add(s1);
         objects.add(s2);
     }
@@ -275,9 +278,11 @@ public class SimpleBattle {
         ss2.add(score(1));
     }
 
+        //checkMines();
+        // get the actions from each player
+
+
     public void advance(Action a1, Action a2) {
-
-
         // and fire any missiles as necessary
         if (a1.shoot) {
             fireMissile(s1.s, s1.d, 0);
@@ -290,6 +295,9 @@ public class SimpleBattle {
         } else {
             stats.get(1).cooldown--;
         }
+        if (a1.mine){
+            dropMine(s1.s, s1.d, 0);
+        }
         // now apply them to the ships
         s1.update(a1);
         s2.update(a2);
@@ -297,6 +305,10 @@ public class SimpleBattle {
         wrap(s1);
         wrap(s2);
 
+
+
+        wrap(s1);
+        wrap(s2);
         /**
          for (GameObject object : objects) {
          wrap(object);
@@ -320,6 +332,7 @@ public class SimpleBattle {
 
         NeuroShip ss1 = s1;
         NeuroShip ss2 = s2;
+
 
 
         //if(playerId == 0)
@@ -446,7 +459,7 @@ public class SimpleBattle {
     protected ArrayList<PlayerStats> copyStats() {
         ArrayList<PlayerStats> statsClone = new ArrayList<PlayerStats>();
         for (PlayerStats object : stats) {
-            statsClone.add(new PlayerStats(object.nMissiles, object.cooldown, object.life, object.nPoints, MISSILE_BUDGET));
+            statsClone.add(new PlayerStats(object.nMissiles, object.cooldown, object.life, object.nPoints, MISSILE_BUDGET, MINE_BUDGET, MINE_BUDGET));
         }
 
         return statsClone;
@@ -518,6 +531,23 @@ public class SimpleBattle {
                             }
                         }
                     }
+                        else if (ob instanceof BattleMine) {
+                            //System.out.println("missile " + ob.getId() + " playerId " + playerId);
+                            if (overlap(actor, ob)) {
+                                ob.hit();
+                                this.stats.get(playerId).life--;
+                                Vector2d dir = new Vector2d(ob.v, true);
+                                dir.normalise();
+
+                                if(playerId==1) {
+                                    s2.addForceRotate(NeuroShip.MIN_FORCE, NeuroShip.MAX_FORCE, dir);
+                                    this.stats.get(0).nPoints += 10;
+                                } else {
+                                    s1.addForceRotate(NeuroShip.MIN_FORCE, NeuroShip.MAX_FORCE, dir);
+                                    this.stats.get(1).nPoints += 10;
+                                }
+                            }
+                    }
                 }
             }
             removeDead();
@@ -541,7 +571,21 @@ public class SimpleBattle {
         }
         removeDead();
     }
-
+  //  protected void checkMines() {
+  //      for(int i=objects.size()-1; i>1; i--) {
+  //          GameObject ob1 = objects.get(i);
+   //         for(int j=i-1; j>1; j--) {
+   //             GameObject ob2 = objects.get(j);
+    //            if(ob1.getId() != ob2.getId()) {
+   //                 if(overlap(ob1,ob2)) {
+    //                    ob1.hit();
+     //                   ob2.hit();
+    ////                }
+    //            }
+   //         }
+    //    }
+   //     removeDead();
+  //  }
     protected void removeDead() {
         for(int i=objects.size()-1; i>1; i--) {
             GameObject ob = objects.get(i);
@@ -603,6 +647,43 @@ public class SimpleBattle {
         }
     }
 
+    protected void dropMine(Vector2d s, Vector2d d, int playerId) {
+        // need all the usual missile firing code here
+        NeuroShip currentShip = playerId == 0 ? s1 : s2;
+        PlayerStats thisStats = this.stats.get(playerId);
+        NeuroShip ss1 = s1;
+        NeuroShip ss2 = s2;
+        if(playerId == 1)
+        {
+            ss1 = s2;
+            ss2 = s1;
+        }
+        double dist = ss1.distTo(ss2);
+        //if (dist >= minShootRange && dist<=maxShootRange && thisStats.nMissiles > 0 && thisStats.cooldown <=0) {
+        if (/*dist >= minShootRange && dist<=maxShootRange &&*/ thisStats.nMines > 0 && thisStats.cooldown <=0) {
+            BattleMine m = new BattleMine(s, new Vector2d(0, 0, true), playerId);
+            // the velocity is noisy
+            //double noiseStrength = 0.05;
+            double noiseStrength = 0.0;
+            double releaseVelocity = MINE_SPEED * (1+Math.random()*noiseStrength);
+            //double releaseVelocity =0;
+            //m.v.add(d, releaseVelocity);
+            m.v = Vector2d.multiply(d,releaseVelocity);
+            // make it clear the ship
+           // m.s.add(m.v, (currentShip.r() + mineRadius) * 1.5 / m.v.mag());
+            // add missile to the object list
+            objects.add(m);
+            //System.out.println("Fired: " + m);
+            //sounds.fire();
+            //this.stats.get(playerId).nMissiles--;
+            thisStats.nMines--;
+            thisStats.nPoints -= this.MINE_COST;
+            thisStats.cooldown = this.MINECOOLDOWN_TIME;
+            //currentShip.addInverseForce(1, 5);
+        } else {
+            thisStats.cooldown--;
+        }
+    }
     public void draw(Graphics2D g) {
         // for (Object ob : objects)
         if (s1 == null || s2 == null) {
@@ -675,6 +756,13 @@ public class SimpleBattle {
 
         return stats.get(playerId).nMissiles;
     }
+    public int getMinesLeft(int playerId) {
+        //return 0;
+        assert playerId < 2;
+        assert playerId >= 0;
+
+        return stats.get(playerId).nMines;
+    }
 
     private void wrap(GameObject ob) {
         // only wrap objects which are wrappable
@@ -742,21 +830,29 @@ public class SimpleBattle {
 
     static class PlayerStats {
         int nMissiles;
+        int nMines;
         int cooldown;
         int life;
         int nPoints;
         int totalMissiles;
+        int totalMines;
 
-        public PlayerStats(int _nMissiles, int _cooldown, int _life, int _nPoints, int _totMissiles) {
+        public PlayerStats(int _nMissiles, int _cooldown, int _life, int _nPoints, int _totMissiles, int _nMines, int _totMines) {
             this.nMissiles = _nMissiles;
+            this.nMines = _nMines;
             this.cooldown = _cooldown;
             this.life = _life;
             this.nPoints = _nPoints;
             this.totalMissiles = _totMissiles;
+            this.totalMines = _totMines;
         }
 
         public int getMissilesFired() {
             return (this.totalMissiles-this.nMissiles);
+        }
+        public int getMinesFired() {
+
+            return (this.totalMines-this.nMines);
         }
 
         public String toString() {

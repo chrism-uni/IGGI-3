@@ -15,13 +15,14 @@ import java.awt.event.KeyListener;
 public class ArrowsController implements BattleController, KeyListener {
 
     public static Action[] ActionMap = new Action[]{
-            new Action(0.0,0.0,false),
-            new Action(0.0,-1.0,false),
-            new Action(0.0,1.0,false),
-            new Action(1.0,0.0,false),
-            new Action(1.0,-1.0,false),
-            new Action(1.0,1.0,false),
-            new Action(0.0,0.0,true)
+            new Action(0.0,0.0,false, false),
+            new Action(0.0,-1.0,false, false),
+            new Action(0.0,1.0,false, false),
+            new Action(1.0,0.0,false, false),
+            new Action(1.0,-1.0,false, false),
+            new Action(1.0,1.0,false, false),
+            new Action(0.0,0.0,true, false),
+            new Action(0.0,0.0,false, true)
     };
 
     Action curAction = ActionMap[0];
@@ -40,12 +41,14 @@ public class ArrowsController implements BattleController, KeyListener {
      * USE action
      */
     private boolean m_use;
+    private boolean m_mine;
 
     public ArrowsController()
     {
         m_turn = 0;
         m_thrust = false;
         m_use = false;
+        m_mine = false;
     }
 
     @Override
@@ -63,7 +66,8 @@ public class ArrowsController implements BattleController, KeyListener {
     {
         if(m_use)
             return ActionMap[6];
-
+        if(m_mine)
+            return ActionMap[7];
         //Thrust actions.
         if(m_thrust)
         {
@@ -102,6 +106,9 @@ public class ArrowsController implements BattleController, KeyListener {
             case KeyEvent.VK_SPACE:
                 m_use = true;
                 break;
+            case KeyEvent.VK_H:
+                m_mine = true;
+                break;
         }
     }
 
@@ -120,6 +127,9 @@ public class ArrowsController implements BattleController, KeyListener {
         }
         if (key == KeyEvent.VK_SPACE) {
             m_use = false;
+        }
+        if (key == KeyEvent.VK_H){
+            m_mine = false;
         }
 
     }
