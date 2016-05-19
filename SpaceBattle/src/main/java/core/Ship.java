@@ -112,8 +112,7 @@ public class Ship extends GameObject {
             m.s.add(m.v, (r() + missileRadius) * 1.5 / m.v.mag());
             releaseVelocity = 0;
             game.add(m);
-            // System.out.println("Fired: " + m);
-            // sounds.fire();
+            // System.out.println("Fired: " + m)
         } else {
             // System.out.println("Failed!");
         }
@@ -141,7 +140,8 @@ public class Ship extends GameObject {
     public void hit() {
         // super.hit();
         // System.out.println("Ship destroyed");
-        dead = true;
+        dead = true;;
+        // sounds.fire();
         game.shipDeath();
         // sounds.play(sounds.bangLarge);
     }

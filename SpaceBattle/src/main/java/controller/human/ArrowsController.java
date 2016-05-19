@@ -41,11 +41,14 @@ public class ArrowsController implements BattleController, KeyListener {
      */
     private boolean m_use;
 
+    private boolean m_create;
+
     public ArrowsController()
     {
         m_turn = 0;
         m_thrust = false;
         m_use = false;
+        m_create = false;
     }
 
     @Override
@@ -99,6 +102,10 @@ public class ArrowsController implements BattleController, KeyListener {
                 m_turn = 1;
                 break;
 
+            case KeyEvent.VK_SHIFT:
+                m_create = true;
+                break;
+
             case KeyEvent.VK_SPACE:
                 m_use = true;
                 break;
@@ -117,6 +124,9 @@ public class ArrowsController implements BattleController, KeyListener {
         }
         if (key == KeyEvent.VK_RIGHT) {
             m_turn = 0;
+        }
+        if (key == KeyEvent.VK_SHIFT) {
+            m_create = false;
         }
         if (key == KeyEvent.VK_SPACE) {
             m_use = false;

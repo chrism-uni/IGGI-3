@@ -10,6 +10,7 @@ public class Action {
     public double thrust;
     public double turn;
     public boolean shoot;
+    public boolean shield;
 
     public Action() {}
 
@@ -20,10 +21,18 @@ public class Action {
      * @param turn 1 is clockwise, -1 is anticlockwise, 0 is don't turn
      * @param shoot true is fire, false is don't fire
      */
+    public Action(double thrust, double turn, boolean shoot, boolean shield) {
+        this.thrust = thrust;
+        this.turn = turn;
+        this.shoot = shoot;
+        this.shield = shield;
+    }
+
     public Action(double thrust, double turn, boolean shoot) {
         this.thrust = thrust;
         this.turn = turn;
         this.shoot = shoot;
+        this.shield = false;
     }
 
     /**
@@ -35,9 +44,10 @@ public class Action {
         thrust = a.thrust;
         turn = a.turn;
         shoot = a.shoot;
+        shield = a.shield;
     }
 
     public String toString() {
-        return thrust + " : " + turn + " : " + shoot;
+        return thrust + " : " + turn + " : " + shoot + " :" + shield;
     }
 }

@@ -268,6 +268,7 @@ public class SimpleBattle {
         checkCollision(s1);
         checkCollision(s2);
         checkMissiles();
+        createShield();
         ss1.add(score(0));
         ss2.add(score(1));
     }
@@ -561,6 +562,44 @@ public class SimpleBattle {
         //if (dist >= minShootRange && dist<=maxShootRange && thisStats.nMissiles > 0 && thisStats.cooldown <=0) {
         if (/*dist >= minShootRange && dist<=maxShootRange &&*/ thisStats.nMissiles > 0 && thisStats.cooldown <=0) {
             BattleMissile m = new BattleMissile(s, new Vector2d(0, 0, true), playerId);
+            // the velocity is noisy
+            //double noiseStrength = 0.05;
+            double noiseStrength = 0.0;
+            double releaseVelocity = MISSILE_SPEED * (1+Math.random()*noiseStrength);
+            //double releaseVelocity =0;
+            //m.v.add(d, releaseVelocity);
+            m.v = Vector2d.multiply(d,releaseVelocity);
+            // make it clear the ship
+            m.s.add(m.v, (currentShip.r() + missileRadius) * 1.5 / m.v.mag());
+            // add missile to the object list
+            objects.add(m);
+            //System.out.println("Fired: " + m);
+            //sounds.fire();
+            //this.stats.get(playerId).nMissiles--;
+            thisStats.nMissiles--;
+            thisStats.nPoints -= this.MISSILE_COST;
+            thisStats.cooldown = this.COOLDOWN_TIME;
+            //currentShip.addInverseForce(1, 5);
+        } else {
+            thisStats.cooldown--;
+        }
+    }
+
+    protected void createShield(Vector2d s, Vector2d d, int playerId) {
+        // need all the usual missile firing code here
+        NeuroShip currentShip = playerId == 0 ? s1 : s2;
+        PlayerStats thisStats = this.stats.get(playerId);
+        NeuroShip ss1 = s1;
+        NeuroShip ss2 = s2;
+        if(playerId == 1)
+        {
+            ss1 = s2;
+            ss2 = s1;
+        }
+        double dist = ss1.distTo(ss2);
+        //if (dist >= minShootRange && dist<=maxShootRange && thisStats.nMissiles > 0 && thisStats.cooldown <=0) {
+        if (/*dist >= minShootRange && dist<=maxShootRange &&*/ thisStats.nMissiles > 0 && thisStats.cooldown <=0) {
+            BattleShield m = new BattleShield(s, new Vector2d(0, 0, true), playerId);
             // the velocity is noisy
             //double noiseStrength = 0.05;
             double noiseStrength = 0.0;
