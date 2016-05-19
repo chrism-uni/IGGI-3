@@ -45,6 +45,12 @@ public class BattleMine extends GameObject {
     public void draw(Graphics2D g) {
         g.setColor(color);
         g.fillOval((int) (s.x-r), (int) (s.y-r), (int) r * 2, (int) r * 2);
+        if (ttl%2==0) {
+            g.setColor(Color.RED);
+        } else {
+            g.setColor(Color.ORANGE);
+        }
+        g.fillOval((int) (s.x-2), (int) (s.y-2), 4, 4);
     }
 
     public boolean dead() {
