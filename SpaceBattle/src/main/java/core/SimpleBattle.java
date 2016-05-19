@@ -479,9 +479,7 @@ public class SimpleBattle {
             int playerId = (actor == s1 ? 0 : 1);
             for (GameObject ob : objects) {
                 if (ob instanceof Shockwave) {
-                    System.out.println("shockwave collision");
                     if (overlap(actor, ob)) {
-                        System.out.println("shockwave overlap");
                         Vector2d dir = new Vector2d(actor.s,true);
                         dir.subtract(ob.s);
                         dir.normalise();
