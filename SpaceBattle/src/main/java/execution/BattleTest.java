@@ -104,6 +104,8 @@ public class BattleTest {
                 return new OneStepLookAhead();
             case "OLMCTS":
                 return new SingleMCTSPlayer(rnd1);
+            case "IGGI3":
+                return new controller.iggi3.SingleMCTSPlayer(rnd1);
             case "NULL":
                 return new NullController();
             case "RND":
