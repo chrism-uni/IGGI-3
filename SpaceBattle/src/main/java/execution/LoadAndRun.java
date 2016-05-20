@@ -23,7 +23,8 @@ public class LoadAndRun {
         run.loadProperties();
         run.printProperties();
         run.setProperties();
-        run.runBattleGame();
+        //run.runBattleGame();
+        run.runBattleTournament();
     }
 
     private void loadProperties () {
@@ -32,10 +33,10 @@ public class LoadAndRun {
         try {
 
             String filename = "config.properties";
-            input = LoadAndRun.class.getClassLoader().getResourceAsStream(filename);
+            input = getClass().getClassLoader().getResourceAsStream(filename);
             if (input == null) {
                 System.out.println("Sorry, unable to find " + filename);
-                System.exit(-1);
+                return;
             }
 
             prop.load(input);
@@ -115,5 +116,13 @@ public class LoadAndRun {
         } else {
             BattleTest.playN(player1, player2, "data/" + player1name + "_vs_" + player2name + "_" + BattleTest.MAX_TICKS_GAME + "x" + BattleTest.NUM_GAMES_TO_PLAY + ".txt");
         }
+    }
+
+
+    private void runBattleTournament() {
+        //String players[] = new String[]{"FUNT", "PINK", "IGGI3", "ARNIE", "CURLY"};
+        String players[] = new String[]{"CURLY", "ARNIE", "IGGI3", "PINK", "FUNT"};
+        
+        BattleTest.tournament(players);
     }
 }
