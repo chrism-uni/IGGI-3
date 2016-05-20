@@ -12,10 +12,8 @@ And be configurable here:
 src/resources/config.properties
 ```
 
-## Default Heuristic
-- dist - distance between ships
-- dot - are they facing same direction
-- distPoints - distance scaled	
-- firePoints - amount of times opponent has been hit
-
-## Our Heuristic
+## Case Statement
+```
+            case "IGGI3":
+                return new controller.iggi3.SingleMCTSPlayer(rnd1);
+```
