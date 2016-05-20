@@ -395,26 +395,35 @@ public class SimpleBattle {
             ss2 = s1;
         }
 
+        int theirID = playerId==0?1:0;
+        
         double dist = Math.abs(ss1.distTo(ss2));//-minShootRange);
 
 
         double dot = ss1.dotTo(ss2);
         double dotDirs = ss1.dotDirections(ss2);
         double distPoints = 1.0/(1.0+dist/100.0);
+        double distancePoints = (dot*distPoints);
+        
         /**
          * Check if the opponent in the shooting range
          */
         double dotAngle= Math.sqrt(1)/2.0;
         double firePoints = stats.get(playerId).nPoints/(10);
         double life = 1-(1/(double)stats.get(playerId).life);
+        
+        //Ratio of lives to other agent
+        int myLives = stats.get(playerId).life;
+        int theirLives = stats.get(theirID).life;
+        double lifeRatio = myLives/(theirLives+myLives);
+        
+        //Ratio of missles to other agent
+        int misslesLeft = stats.get(playerId).nMissiles;
+        int theirMisslesLeft = stats.get(theirID).nMissiles;
+        double misslesRatio = theirMisslesLeft/(misslesLeft+theirMisslesLeft);
+        
         if(fitFunc==1)
-            if (playerId == 0) {
-                Vector2d dir = new Vector2d(ss2.d);
-                dir
-                return (dot * distPoints + firePoints + life); //(currentTick/2000.0);//+ Math.pow(stats.get(1).nPoints+0.1,-1) + stats.get(1).getMissilesFired();
-            } else {
-                return (dot * distPoints + firePoints);
-            }
+             return (dot * distPoints + firePoints);
         else
             return firePoints;
     }

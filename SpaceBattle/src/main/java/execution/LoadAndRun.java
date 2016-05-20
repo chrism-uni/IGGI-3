@@ -32,10 +32,10 @@ public class LoadAndRun {
         try {
 
             String filename = "config.properties";
-            input = getClass().getClassLoader().getResourceAsStream(filename);
+            input = LoadAndRun.class.getClassLoader().getResourceAsStream(filename);
             if (input == null) {
                 System.out.println("Sorry, unable to find " + filename);
-                return;
+                System.exit(-1);
             }
 
             prop.load(input);

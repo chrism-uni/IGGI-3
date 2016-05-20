@@ -1,9 +1,11 @@
 package controller.iggi3;
 
 import core.ActionMap;
+import core.NeuroShip;
 import core.SimpleBattle;
 import utils.ElapsedCpuTimer;
 import utils.Util;
+import utils.Vector2d;
 
 import java.util.Random;
 
@@ -196,7 +198,7 @@ public class SingleTreeNode
 
         boolean gameOver = a_gameState.isGameOver();
         int winner = a_gameState.getGameWinner();
-        double rawScore = a_gameState.score(playerID);
+        double rawScore = getScore(a_gameState, playerID);
 
         if(gameOver && winner == (1-playerID))
             rawScore += HUGE_NEGATIVE;
@@ -205,6 +207,46 @@ public class SingleTreeNode
             rawScore += HUGE_POSITIVE;
 
         return rawScore;
+    }
+    
+    public double getScore(SimpleBattle battle, int playerID) {
+
+            NeuroShip ss1 = battle.getShip(0);
+            NeuroShip ss2 = battle.getShip(1);
+
+            if(playerID == 1)
+            {
+                ss1 = battle.getShip(1);
+                ss2 = battle.getShip(0);
+            }
+
+            int theirID = playerID==0?1:0;
+            
+            
+            
+            double dist = Math.abs(ss1.distTo(ss2));//-minShootRange);
+
+
+            double dot = ss1.dotTo(ss2);
+            double dotDirs = ss1.dotDirections(ss2);
+            double distPoints = 1.0/(1.0+dist/100.0);
+            double distancePoints = (dot*distPoints);
+            
+            /**
+             * Check if the opponent in the shooting range
+             */
+            
+            //Ratio of scores to other agent
+            double ourScore = battle.getScore(playerID) + 500;
+            double theirScore = battle.getScore(theirID) + 500;
+            double scoreRatio = ourScore/(theirScore+ourScore);
+           
+            //Ratio of missles to other agent
+            int misslesLeft = battle.getMissilesLeft(playerID) + 1;
+            int theirMisslesLeft = battle.getMissilesLeft(theirID) + 1;
+            double missilesRatio = misslesLeft/(misslesLeft+theirMisslesLeft);
+            
+            return distancePoints + scoreRatio + missilesRatio;
     }
 
     public boolean finishRollout(SimpleBattle rollerState, int depth)
@@ -276,7 +318,7 @@ public class SingleTreeNode
 
         return selected;
     }
-
+    
     public int bestAction()
     {
         int selected = -1;
