@@ -22,7 +22,7 @@ public class Agent extends AbstractPlayer {
 
     public static int NUM_ACTIONS = ActionMap.ActionMap.length;
     public static int MCTS_ITERATIONS = 100;
-    public static int ROLLOUT_DEPTH = 10;
+    public static int ROLLOUT_DEPTH = 80;
     public static double K = Math.sqrt(2);
     public static double REWARD_DISCOUNT = 1.00;
     public static Action[] actions;

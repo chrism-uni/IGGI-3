@@ -225,12 +225,13 @@ public class SingleTreeNode
             
             
             double dist = Math.abs(ss1.distTo(ss2));//-minShootRange);
-
+            double dotDirs = ss1.dotDirections(ss2);
 
             double dot = ss1.dotTo(ss2);
-            double dotDirs = ss1.dotDirections(ss2);
             double distPoints = 1.0/(1.0+dist/100.0);
-            double distancePoints = (dot*distPoints);
+            
+            double theirDot = ss2.dotTo(ss1);
+            double distancePoints = (dot*distPoints) + -(theirDot*distPoints);
             
             /**
              * Check if the opponent in the shooting range

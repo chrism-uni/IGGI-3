@@ -386,6 +386,10 @@ public class SimpleBattle {
      */
     private double calcScore(int playerId)
     {
+    	if (1==1) {
+    		return 0;
+    	}
+    	
         NeuroShip ss1 = s1;
         NeuroShip ss2 = s2;
 
