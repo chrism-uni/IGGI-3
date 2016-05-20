@@ -386,10 +386,6 @@ public class SimpleBattle {
      */
     private double calcScore(int playerId)
     {
-    	if (1==1) {
-    		return 0;
-    	}
-    	
         NeuroShip ss1 = s1;
         NeuroShip ss2 = s2;
 
@@ -399,12 +395,13 @@ public class SimpleBattle {
             ss2 = s1;
         }
 
-        int theirID = playerId==0?1:0;
+        int playerID = playerId==0?1:0;
+        int theirID = playerId==0?0:1;
         
         double dist = Math.abs(ss1.distTo(ss2));//-minShootRange);
 
 
-        double dot = ss1.dotTo(ss2);
+        double dot = ss2.dotTo(ss1);
         double dotDirs = ss1.dotDirections(ss2);
         double distPoints = 1.0/(1.0+dist/100.0);
         double distancePoints = (dot*distPoints);
@@ -413,16 +410,16 @@ public class SimpleBattle {
          * Check if the opponent in the shooting range
          */
         double dotAngle= Math.sqrt(1)/2.0;
-        double firePoints = stats.get(playerId).nPoints/(10);
-        double life = 1-(1/(double)stats.get(playerId).life);
+        double firePoints = stats.get(playerID).nPoints/(10);
+        double life = 1-(1/(double)stats.get(playerID).life);
         
         //Ratio of lives to other agent
-        int myLives = stats.get(playerId).life;
+        int myLives = stats.get(playerID).life;
         int theirLives = stats.get(theirID).life;
         double lifeRatio = myLives/(theirLives+myLives);
         
         //Ratio of missles to other agent
-        int misslesLeft = stats.get(playerId).nMissiles;
+        int misslesLeft = stats.get(playerID).nMissiles;
         int theirMisslesLeft = stats.get(theirID).nMissiles;
         double misslesRatio = theirMisslesLeft/(misslesLeft+theirMisslesLeft);
         

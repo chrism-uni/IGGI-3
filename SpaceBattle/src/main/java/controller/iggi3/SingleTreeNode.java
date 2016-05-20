@@ -243,8 +243,9 @@ public class SingleTreeNode
             double scoreRatio = ourScore/(theirScore+ourScore);
            
             //Ratio of missles to other agent
-            int misslesLeft = battle.getMissilesLeft(playerID) + 1;
-            int theirMisslesLeft = battle.getMissilesLeft(theirID) + 1;
+            double misslesLeft = battle.getMissilesLeft(playerID) + 1;
+            double theirMisslesLeft = battle.getMissilesLeft(theirID) + 1;
+            System.out.println(misslesLeft);
             double missilesRatio = misslesLeft/(misslesLeft+theirMisslesLeft);
             
             return distancePoints + scoreRatio + missilesRatio;

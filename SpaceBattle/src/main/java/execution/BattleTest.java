@@ -2,6 +2,7 @@ package execution;
 
 import core.*;
 import controller.*;
+import controller.Arnie.ArnieController;
 import controller.human.*;
 import controller.sampleRHEA.*;
 import controller.sampleRHEA.search.*;
@@ -9,6 +10,7 @@ import controller.sampleRHEA.strategy.*;
 import controller.sampleOLMCTS.*;
 import controller.nullController.NullController;
 import controller.onesteplookahead.OneStepLookAhead;
+import controller.pinkBomb.PinkBombController;
 import controller.fireForwardController.FireForwardController;
 import controller.random.RandomController;
 import controller.rotateAndShoot.RotateAndShoot;
@@ -118,6 +120,27 @@ public class BattleTest {
                 return new FireForwardController();
             case "RAS":
                 return new RotateAndShoot();
+            case "PINK":
+                return new PinkBombController(new controller.pinkBomb.GASearch(
+                        new controller.pinkBomb.UniformCrossover(rnd1),
+                        new controller.pinkBomb.PMutation(rnd1),
+                        new controller.pinkBomb.TournamentSelection(rnd1),
+                        new controller.pinkBomb.RndOpponentGenerator(rnd1),
+                        rnd1));
+            case "FUNT":
+            	return new controller.funGAController.BattleEvoController(new controller.funGAController.search.CoevSearch(
+            			new controller.funGAController.strategy.TripleParentCrossover(rnd1),
+            			new controller.funGAController.strategy.PMutation(rnd1),
+            			new controller.funGAController.strategy.TournamentSelection(rnd1),
+            			new controller.funGAController.strategy.RandomPairing(rnd1),
+            			rnd1));
+            case "ARNIE":
+                return new ArnieController(new controller.Arnie.ArnieCoevSearch(
+                        new controller.Arnie.ArnieUniformCrossover(rnd1),
+                        new controller.Arnie.ArniePMutation(rnd1),
+                        new controller.Arnie.ArnieTournamentSelection(rnd1),
+                        new controller.Arnie.ArnieRandomPairing(rnd1),
+                        rnd1));
             case "DETOLMCTS":
                 return new SingleMCTSPlayerDetOpp(rnd1);
         }
