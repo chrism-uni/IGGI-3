@@ -27,7 +27,8 @@ public class SingleTreeNode
     protected static double[] bounds = new double[]{Double.MAX_VALUE, -Double.MAX_VALUE};
     public int childIdx;
     public int playerID;
-    public int ROLLOUT_DEPTH = 10;
+    public int ROLLOUT_DEPTH = 80;
+    public double C = 1.41; //Math.sqrt(2);
     public int NUM_ACTIONS = ActionMap.ActionMap.length;
 
     public static SimpleBattle rootState;
@@ -131,7 +132,7 @@ public class SingleTreeNode
             //System.out.println("norm child value: " + childValue);
 
             double uctValue = childValue +
-                    Math.sqrt(2) * Math.sqrt(Math.log(this.nVisits + 1) / (child.nVisits + this.epsilon));
+                    C * Math.sqrt(Math.log(this.nVisits + 1) / (child.nVisits + this.epsilon));
 
             uctValue = Util.noise(uctValue, this.epsilon, this.m_rnd.nextDouble());     //break ties randomly
 

@@ -26,7 +26,7 @@ public class SingleTreeNode
     protected static double[] bounds = new double[]{Double.MAX_VALUE, -Double.MAX_VALUE};
     public int childIdx;
     public int playerID;
-    public int ROLLOUT_DEPTH = 10;
+    public int ROLLOUT_DEPTH = 50;
     public int NUM_ACTIONS = ActionMap.ActionMap.length;
 
     public static SimpleBattle rootState;

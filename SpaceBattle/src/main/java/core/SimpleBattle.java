@@ -238,7 +238,7 @@ public class SimpleBattle {
         pos.add(Util.randomIntInRange(0,100)+((int)(area1%2)*250)+100);
         pos.add(Util.randomIntInRange(0,100)+((int)(area1/2)*250)+100);
         pos.add(Util.randomIntInRange(0,100)+((int)(area2%2)*250)+100);
-        pos.add(Util.randomIntInRange(0,100)+((int)(area2/2)*250)+100);
+        pos.add(Util.randomIntInRange(0, 100) + ((int) (area2 / 2) * 250) + 100);
         return pos;
     }
 
@@ -406,8 +406,15 @@ public class SimpleBattle {
          */
         double dotAngle= Math.sqrt(1)/2.0;
         double firePoints = stats.get(playerId).nPoints/(10);
+        double life = 1-(1/(double)stats.get(playerId).life);
         if(fitFunc==1)
-            return (dot*distPoints + firePoints);
+            if (playerId == 0) {
+                Vector2d dir = new Vector2d(ss2.d);
+                dir
+                return (dot * distPoints + firePoints + life); //(currentTick/2000.0);//+ Math.pow(stats.get(1).nPoints+0.1,-1) + stats.get(1).getMissilesFired();
+            } else {
+                return (dot * distPoints + firePoints);
+            }
         else
             return firePoints;
     }
