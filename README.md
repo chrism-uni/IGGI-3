@@ -20,10 +20,11 @@ src/resources/config.properties
 
 # Results
 
-| Group | Scores |
-| ----- | ------ |
-| CURLY | 5.0 points |
-| ARNIE | 20.0 points |
-| IGGI3 | 37.0 points |
-| PINK | 32.0 points |
-| FUNT | 6.0 points |
+| Group | Scores 1| Scores 2 | Scores 3 |
+| ----- | ------ | --- | --- |
+| CURLY | 5.0 points | 5.0 points | 4.0 points |
+| ARNIE | 20.0 points | 19.0 points | 20.0 points |
+| IGGI3 | 37.0 points | 35.0 points | 38.0 points |
+| PINK | 32.0 points | 33.0 points | 32.0 points |
+| FUNT | 6.0 points | 8.0 points | 6.0 points |
+ 
