@@ -576,12 +576,15 @@ public class SimpleBattle {
             GameObject ob1 = objects.get(i);
             for(int j=i-1; j>1; j--) {
                 GameObject ob2 = objects.get(j);
+                if (ob1 instanceof Shockwave || ob2 instanceof Shockwave) continue;
                 if(ob1.getId() != ob2.getId()) {
                     if(overlap(ob1,ob2)) {
+                        if (!ob1.dead() && !ob2.dead()) {
+                            Shockwave shock = new Shockwave(ob1.s, new Vector2d(0, 0, true));
+                            objects.add(shock);
+                        }
                         ob1.hit();
                         ob2.hit();
-                        Shockwave shock = new Shockwave(ob1.s, new Vector2d(0,0, true));
-                        objects.add(shock);
                     }
                 }
             }
